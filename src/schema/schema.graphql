@@ -1,0 +1,65 @@
+schema {
+  query: Query
+}
+
+type AddressObject {
+  html: String!
+  text: String!
+  value: [EmailAddress!]!
+}
+
+input DateRange {
+  end: DateTime
+  start: DateTime
+}
+
+"""RFC 3339-compliant date and time"""
+scalar DateTime
+
+type Email {
+  bcc: [AddressObject!]!
+  body: EmailBody
+  cc: [AddressObject!]!
+  connectionId: ID!
+  createdAt: DateTime!
+  date: DateTime
+  from: AddressObject
+  id: ID!
+  inReplyTo: String
+  messageId: String
+  references: [String!]
+  replyTo: AddressObject
+  subject: String
+  to: [AddressObject!]
+  updatedAt: DateTime!
+}
+
+type EmailAddress {
+  address: String!
+  group: [EmailAddress!]
+  name: String
+}
+
+type EmailBody {
+  html: String
+  text: String
+}
+
+input EmailFilters {
+  address: String
+  body: String
+  connectionId: [String!]
+  dateRange: DateRange
+  id: String
+  subject: String
+}
+
+input EmailInput {
+  cursor: String
+  filters: EmailFilters
+  pageSize: Float = 10
+}
+
+type Query {
+  emails(input: EmailInput): [Email!]!
+}
