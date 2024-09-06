@@ -2,9 +2,9 @@
 
 This app allows you to connect your Tangle account to your Zendesk instance and view all your customer emails stored on Tangle, next to your Zendesk tickets.
 
-The purpose of this repository is for the Zendesk team to review the app and give the go-ahead for it to be published on the Zendesk Marketplace.
+The purpose of this repository is for the Zendesk team to review the app versions before they go live on the Zendesk Marketplace.
 
-If you're not from the Zendesk team, you'll have much more fun using the app by simply installing it from the marketplace, once it's published.
+If you're not from the Zendesk team, you'll have much more fun using the app by simply installing it [from the marketplace](https://www.zendesk.com/marketplace/apps/support/1065910/tangle).
 
 
 ## Setup
@@ -12,7 +12,7 @@ If you're not from the Zendesk team, you'll have much more fun using the app by 
 ```
 bun install
 ```
-By default, you will see fake data in the app that always returns *something* for any Zendesk ticket, unless you use your own API key that you can [get on Tangle](https://tangle.soy).
+By default, you will see fake data in the app that always returns *something* for any Zendesk ticket, unless you use your own API key that you can [get on Tangle](https://tangle.soy?ref=gh).
 
 
 ## Running locally
@@ -50,10 +50,10 @@ bun run start:prod
 
 ## Environment variables
 
-- `VITE_TANGLE_API_KEY`: By default, the app is configured to use the sandbox API key that always returns a fake response. You can [get your own API key on Tangle](https://tangle.soy).
+- `VITE_TANGLE_API_KEY`: By default, the app is configured to use the sandbox API key that always returns a fake response. You can [get your own API key on Tangle](https://tangle.soy?ref=gh).
 
 ## Deploying
-On deploy, the app will ask for an API key. You can use the sandbox API key — `ALWAYS_RETURN_DEMO_DATA` — or [get your own API key on Tangle](https://tangle.soy).
+On deploy, the app will ask for an API key. You can use the sandbox API key — `ALWAYS_RETURN_DEMO_DATA` — or [get your own API key on Tangle](https://tangle.soy?ref=gh).
 
 To check that your app will pass the server-side validation check, run:
 
