@@ -30,7 +30,8 @@ export function addParameters(content) {
       name: 'apiKey',
       type: 'password',
       secure: true,
-      required: true
+      required: true,
+      default: "ALWAYS_RETURN_DEMO_DATA"
     }
   ]
 

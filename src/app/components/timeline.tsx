@@ -10,7 +10,7 @@ import { EmailsQuery } from '@/gql/graphql'
 import { Suspense } from 'react'
 import { Skeleton } from '@zendeskgarden/react-loaders'
 import { EmailDate } from './EmailDate'
-import { Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
+import { GlobalAlert, Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
 
 const StyledTimelineItem = styled(ZendeskTimeline.Item)`
   .view-email-button {
@@ -83,8 +83,27 @@ const TimelineContent = ({
     )
   }
 
+  const mode = data.emails[0].id === 'eml_1' ? 'demo' : 'live'
+
   return (
     <ZendeskTimeline>
+      {mode === 'demo' && (
+        <GlobalAlert type="info" style={{ marginTop: '1rem' }}>
+          <GlobalAlert.Content>
+            <Title>Demo mode</Title>
+            <Paragraph>Emails below are examples.</Paragraph>
+            <Paragraph>Complete app setup to see real emails:</Paragraph>
+            <Paragraph>
+              1.{' '}
+              <a href="https://usetangle.com/?ref=za" target="_blank">
+                Sign up for Tangle
+              </a>{' '}
+              <Paragraph>2. Get an API key in your Tangle team settings</Paragraph>
+              <Paragraph>3. Add the key in your Zendesk settings</Paragraph>
+            </Paragraph>
+          </GlobalAlert.Content>
+        </GlobalAlert>
+      )}
       {data.emails.map((email, index) => (
         <StyledTimelineItem key={index}>
           <ZendeskTimeline.Content>
