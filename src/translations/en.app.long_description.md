@@ -1,6 +1,6 @@
 Tangle makes it easy to keep track of all your customer emails. No matter where they are or what system sent them — Tangle stores them all. No more guessing how an email looks like, where to find it, and how to resend it if customer asks for it.
 
-Visit [Tangle](https://tangle.soy?ref=zm) to find out more.
+Visit [Tangle](https://usetangle.com?ref=zm) to find out more.
 
 ---
 
@@ -51,4 +51,4 @@ Tangle makes it easy to resolve requests like these, fast.
 - Pro: access to all email history
 - Enterprise: volume discounts and an option to store emails on your infrastructure
 
-Visit [Plans on Tangle website](https://tangle.soy?ref=zm).
+Visit [Plans on Tangle website](https://usetangle.com?ref=zm).

@@ -12,7 +12,7 @@ If you're not from the Zendesk team, you'll have much more fun using the app by 
 ```
 bun install
 ```
-By default, you will see fake data in the app that always returns *something* for any Zendesk ticket, unless you use your own API key that you can [get on Tangle](https://tangle.soy?ref=gh).
+By default, you will see fake data in the app that always returns *something* for any Zendesk ticket, unless you use your own API key that you can [get on Tangle](https://usetangle.com?ref=gh).
 
 
 ## Running locally
@@ -50,10 +50,10 @@ bun run start:prod
 
 ## Environment variables
 
-- `VITE_TANGLE_API_KEY`: By default, the app is configured to use the sandbox API key that always returns a fake response. You can [get your own API key on Tangle](https://tangle.soy?ref=gh).
+- `VITE_TANGLE_API_KEY`: By default, the app is configured to use the sandbox API key that always returns a fake response. You can [get your own API key on Tangle](https://usetangle.com?ref=gh).
 
 ## Deploying
-On deploy, the app will ask for an API key. You can use the sandbox API key — `ALWAYS_RETURN_DEMO_DATA` — or [get your own API key on Tangle](https://tangle.soy?ref=gh).
+On deploy, the app will ask for an API key. You can use the sandbox API key — `ALWAYS_RETURN_DEMO_DATA` — or [get your own API key on Tangle](https://usetangle.com?ref=gh).
 
 To check that your app will pass the server-side validation check, run:
 
