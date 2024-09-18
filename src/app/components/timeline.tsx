@@ -11,6 +11,7 @@ import { Suspense } from 'react'
 import { Skeleton } from '@zendeskgarden/react-loaders'
 import { EmailDate } from './EmailDate'
 import { GlobalAlert, Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
+import { EmailStatus } from './EmailStatus'
 
 const StyledTimelineItem = styled(ZendeskTimeline.Item)`
   .view-email-button {
@@ -29,6 +30,7 @@ const emails = graphql(`
       id
       subject
       date
+      status
       from {
         value {
           address
@@ -117,9 +119,16 @@ const TimelineContent = ({
                 </>
               )}
             </Row>
+            {!!email.status && (
+              <Row style={{ color: 'GrayText', display: 'block' }}>
+                <Span>
+                  Email status: <EmailStatus status={email.status} />
+                </Span>
+              </Row>
+            )}
             <Row style={{ color: 'GrayText' }}>
               <Span>
-                <EmailDate date={email.date} />{' '}
+                Sent <EmailDate date={email.date} />{' '}
                 <Button
                   isLink
                   className="view-email-button"

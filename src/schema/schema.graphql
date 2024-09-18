@@ -29,6 +29,7 @@ type Email {
   messageId: String
   references: [String!]
   replyTo: AddressObject
+  status: EmailStatusEnum
   subject: String
   to: [AddressObject!]
   updatedAt: DateTime!
@@ -58,6 +59,23 @@ input EmailInput {
   cursor: String
   filters: EmailFilters
   pageSize: Float = 10
+}
+
+"""Possible statuses for an email"""
+enum EmailStatusEnum {
+  ATTEMPTED
+  BOUNCED
+  CLICKED
+  CONVERTED
+  DELIVERED
+  DRAFTED
+  DROPPED
+  FAILED
+  OPENED
+  SENT
+  SPAMMED
+  UNDELIVERABLE
+  UNSUBSCRIBED
 }
 
 type Query {
