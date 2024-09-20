@@ -3,7 +3,7 @@ import { useClient } from '../hooks/useClient'
 import { Grid, Row } from '@zendeskgarden/react-grid'
 import { MD, SM, Span } from '@zendeskgarden/react-typography'
 import styled from 'styled-components'
-import Timeline from '../components/Timeline'
+import Timeline from '../components/timeline'
 import { Requester } from '@/types/zendesk'
 
 const TicketSideBar = () => {
