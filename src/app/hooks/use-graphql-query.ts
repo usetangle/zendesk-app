@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from 'react-query'
 import { DocumentNode, print } from 'graphql'
-import { useClient } from '@/app/hooks/useClient'
+import { useClient } from '@/app/hooks/use-client'
 import { ZAFClient } from '@/types/zendesk'
 
 type CorsResponse<T> = { data: T }

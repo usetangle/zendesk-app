@@ -1,11 +1,11 @@
 import { lazy } from 'react'
-import { useLocation } from './hooks/useClient'
-import { TranslationProvider } from './contexts/TranslationProvider'
-import { QueryClientProvider } from './contexts/QueryClientProvider'
+import { useLocation } from './hooks/use-client'
+import { TranslationProvider } from './contexts/translation-provider'
+import { QueryClientProvider } from './contexts/query-client-provider'
 import { ThemeProvider } from '@zendeskgarden/react-theming'
 
-const TicketSideBar = lazy(() => import('./locations/TicketSideBar'))
-const Modal = lazy(() => import('./locations/Modal'))
+const TicketSideBar = lazy(() => import('./locations/ticket-sidebar'))
+const Modal = lazy(() => import('./locations/modal'))
 
 const LOCATIONS = {
   ticket_sidebar: TicketSideBar,

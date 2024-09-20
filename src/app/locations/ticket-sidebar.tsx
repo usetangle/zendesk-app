@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useClient } from '../hooks/useClient'
+import { useClient } from '../hooks/use-client'
 import { Grid, Row } from '@zendeskgarden/react-grid'
 import { MD, SM, Span } from '@zendeskgarden/react-typography'
 import styled from 'styled-components'

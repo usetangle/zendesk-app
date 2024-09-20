@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import { ClientProvider } from './contexts/ClientProvider.jsx'
+import App from './app.jsx'
+import { ClientProvider } from './contexts/client-provider.jsx'
 import '@zendeskgarden/css-bedrock'
 import './index.css'
 

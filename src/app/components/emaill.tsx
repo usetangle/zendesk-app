@@ -1,7 +1,7 @@
 import type { EmailQuery } from '@/gql/graphql'
-import { EmailAddresses } from './EmailAddresses'
-import { EmailDate } from './EmailDate'
-import { EmailBody } from './EmailBody'
+import { EmailAddresses } from './email-address'
+import { EmailDate } from './email-date'
+import { EmailBody } from './email-body'
 import styled from 'styled-components'
 import { Skeleton } from '@zendeskgarden/react-loaders'
 

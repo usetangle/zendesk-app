@@ -1,17 +1,17 @@
 import { Timeline as ZendeskTimeline } from '@zendeskgarden/react-accordions'
 import { graphql } from '@/gql/gql'
 import { Col, Row } from '@zendeskgarden/react-grid'
-import { EmailAddresses } from './EmailAddresses'
+import { EmailAddresses } from './email-address'
 import { Span } from '@zendeskgarden/react-typography'
 import { Button } from '@zendeskgarden/react-buttons'
 import styled from 'styled-components'
-import { useGraphqlQuery } from '@/app/hooks/useGraphqlQuery'
+import { useGraphqlQuery } from '@/app/hooks/use-graphql-query'
 import { EmailsQuery } from '@/gql/graphql'
 import { Suspense } from 'react'
 import { Skeleton } from '@zendeskgarden/react-loaders'
-import { EmailDate } from './EmailDate'
+import { EmailDate } from './email-date'
 import { GlobalAlert, Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
-import { EmailStatus } from './EmailStatus'
+import { EmailStatus } from './email-status'
 
 const StyledTimelineItem = styled(ZendeskTimeline.Item)`
   .view-email-button {

@@ -1,8 +1,8 @@
 import { graphql } from '@/gql'
 import { EmailQuery } from '@/gql/graphql'
-import { useGraphqlQuery } from '@/app/hooks/useGraphqlQuery'
+import { useGraphqlQuery } from '@/app/hooks/use-graphql-query'
 import { Suspense } from 'react'
-import { Email, EmailSkeleton } from '../components/Email'
+import { Email, EmailSkeleton } from '../components/emaill'
 
 const email = graphql(`
   query Email($id: String!) {

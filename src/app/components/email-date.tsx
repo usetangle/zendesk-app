@@ -1,4 +1,4 @@
-import { formatDate } from '@/lib/dateFormat'
+import { formatDate } from '@/lib/date-format'
 import { Tooltip } from '@zendeskgarden/react-tooltips'
 import { Span } from '@zendeskgarden/react-typography'
 

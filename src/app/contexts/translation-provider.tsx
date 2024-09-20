@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react'
-import { useClient } from '../hooks/useClient'
+import { useClient } from '../hooks/use-client'
 import I18n from '../../lib/i18n'
 
 export const TranslationContext = createContext<{
