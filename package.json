@@ -18,12 +18,14 @@
     "@zendeskgarden/css-bedrock": "^9.1.1",
     "@zendeskgarden/react-accordions": "^8.76.6",
     "@zendeskgarden/react-buttons": "^8.76.3",
+    "@zendeskgarden/react-forms": "^8.76.7",
     "@zendeskgarden/react-grid": "^8.76.3",
     "@zendeskgarden/react-loaders": "^8.76.7",
     "@zendeskgarden/react-notifications": "^8.76.7",
     "@zendeskgarden/react-theming": "^8.76.3",
     "@zendeskgarden/react-tooltips": "^8.76.7",
     "@zendeskgarden/react-typography": "^8.76.3",
+    "@zendeskgarden/svg-icons": "^7.3.0",
     "luxon": "^3.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -51,6 +53,7 @@
     "jsdom": "^24.1.0",
     "prettier": "^3.2.5",
     "vite": "^5.2.0",
+    "vite-plugin-svgr": "^4.2.0",
     "vitest": "^1.6.0"
   }
 }

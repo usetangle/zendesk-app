@@ -5,14 +5,15 @@ import { MD, SM, Span } from '@zendeskgarden/react-typography'
 import styled from 'styled-components'
 import Timeline from '../components/timeline'
 import { Requester } from '@/types/zendesk'
+import Search from '../components/search'
 
 const TicketSideBar = () => {
   const client = useClient()
-  const [requester, setRequester] = useState<Requester | undefined>(undefined)
+  const [searchTerm, setSearchTerm] = useState<string>('')
   useEffect(() => {
     const getRequester = async () => {
       const requester = await client.get('ticket.requester')
-      setRequester(requester['ticket.requester'])
+      setSearchTerm(requester['ticket.requester'].email)
     }
     getRequester()
   }, [client])
@@ -29,26 +30,29 @@ const TicketSideBar = () => {
   }
 
   useEffect(() => {
-    client.invoke('resize', { width: '100%', height: '450px' })
+    client.invoke('resize', { width: '100%', height: '550px' })
   }, [client])
 
   return (
     <GridContainer>
-      {requester && (
-        <>
-          <Row>
-            <MD style={{ fontWeight: '600' }}>{requester.name}</MD>
-          </Row>
-          <Row>
-            <SM style={{ color: 'GrayText' }}>
-              Emails for <Span style={{ fontWeight: '500' }}>{requester.email}</Span>
-            </SM>
-          </Row>
-          <Row>
-            <Timeline address={requester.email} emailViewHandler={handleNewInstance} />
-          </Row>
-        </>
-      )}
+      <>
+        <Row>
+          <Search
+            initialSearch={searchTerm}
+            onSubmit={setSearchTerm}
+            style={{
+              width: '100%',
+              position: 'sticky',
+              top: '0',
+              backgroundColor: 'white',
+              zIndex: 10,
+              paddingBottom: '10px'
+            }}
+          />
+          <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />
+        </Row>
+        <Row></Row>
+      </>
     </GridContainer>
   )
 }

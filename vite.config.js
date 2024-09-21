@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url'
 import { resolve, dirname } from 'node:path'
+import svgr from "vite-plugin-svgr";
 import react from '@vitejs/plugin-react'
 import TranslationsLoader from './rollup/translations-loader-plugin'
 import { extractMarketplaceTranslation } from './rollup/modifiers/translations'
@@ -42,6 +43,7 @@ export default ({ mode }) => {
   return defineConfig({
     base: './',
     plugins: [
+      svgr(),
       react(),
       TranslationsLoader(),
       StaticCopy({

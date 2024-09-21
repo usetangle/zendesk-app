@@ -28,28 +28,32 @@ export const useGraphqlQuery = <T>({
 }): UseQueryResult<T> => {
   const client = useClient()
   const query = print(document)
-  const request: Parameters<ZAFClient['request']>[0] = {
-    url: `${import.meta.env.VITE_TANGLE_API_BASE_URL}/graphql`,
-    type: 'POST',
-    contentType: 'application/json',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': import.meta.env.VITE_TANGLE_API_KEY
-    },
-    data: JSON.stringify({ query, variables }),
-    secure: import.meta.env.PROD,
-    cors: !import.meta.env.PROD
-  }
+
+  const hasEmptyStringVariable = Object.values(variables).some((value) => value === '')
 
   return useQuery<T>({
     queryKey,
     queryFn: async () => {
+      const request: Parameters<ZAFClient['request']>[0] = {
+        url: `${import.meta.env.VITE_TANGLE_API_BASE_URL}/graphql`,
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': import.meta.env.VITE_TANGLE_API_KEY
+        },
+        data: JSON.stringify({ query, variables }),
+        secure: import.meta.env.PROD,
+        cors: !import.meta.env.PROD
+      }
+
       const response = await client.request<T>(request)
       if (isCorsResponse<T>(response)) {
         return response.data
       }
       return response.responseJSON
     },
+    enabled: !hasEmptyStringVariable,
     suspense
   })
 }
