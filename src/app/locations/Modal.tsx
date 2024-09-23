@@ -49,7 +49,7 @@ const EmailContent = ({ id }: { id: string }) => {
     suspense: true
   })
 
-  if (!data || data.emails.length === 0) {
+  if (!data || data.pages[0].emails.length === 0) {
     return (
       <div
         style={{
@@ -67,7 +67,7 @@ const EmailContent = ({ id }: { id: string }) => {
     )
   }
 
-  return <Email email={data.emails[0]} />
+  return <Email email={data.pages[0].emails[0]} />
 }
 
 const Modal = () => {

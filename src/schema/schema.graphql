@@ -56,7 +56,8 @@ input EmailFilters {
 }
 
 input EmailInput {
-  cursor: String
+  """createdAt as cursor"""
+  after: DateTime
   filters: EmailFilters
   pageSize: Float = 10
 }
@@ -78,6 +79,12 @@ enum EmailStatusEnum {
   UNSUBSCRIBED
 }
 
+type PaginatedEmailResponse {
+  hasMore: Boolean!
+  items: [Email!]!
+}
+
 type Query {
   emails(input: EmailInput): [Email!]!
+  emailsPaginated(input: EmailInput): PaginatedEmailResponse!
 }

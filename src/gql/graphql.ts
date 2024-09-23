@@ -73,7 +73,8 @@ export type EmailFilters = {
 };
 
 export type EmailInput = {
-  cursor?: InputMaybe<Scalars['String']['input']>;
+  /** createdAt as cursor */
+  after?: InputMaybe<Scalars['DateTime']['input']>;
   filters?: InputMaybe<EmailFilters>;
   pageSize?: InputMaybe<Scalars['Float']['input']>;
 };
@@ -95,9 +96,16 @@ export enum EmailStatusEnum {
   Unsubscribed = 'UNSUBSCRIBED'
 }
 
+export type PaginatedEmailResponse = {
+  __typename?: 'PaginatedEmailResponse';
+  hasMore: Scalars['Boolean']['output'];
+  items: Array<Email>;
+};
+
 export type Query = {
   __typename?: 'Query';
   emails: Array<Email>;
+  emailsPaginated: PaginatedEmailResponse;
 };
 
 
@@ -105,12 +113,19 @@ export type QueryEmailsArgs = {
   input?: InputMaybe<EmailInput>;
 };
 
+
+export type QueryEmailsPaginatedArgs = {
+  input?: InputMaybe<EmailInput>;
+};
+
 export type EmailsQueryVariables = Exact<{
   address: Scalars['String']['input'];
+  after?: InputMaybe<Scalars['DateTime']['input']>;
+  pageSize?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
 
-export type EmailsQuery = { __typename?: 'Query', emails: Array<{ __typename?: 'Email', id: string, subject?: string | null, date?: any | null, status?: EmailStatusEnum | null, from?: { __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> } | null, to?: Array<{ __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> }> | null }> };
+export type EmailsQuery = { __typename?: 'Query', emailsPaginated: { __typename?: 'PaginatedEmailResponse', hasMore: boolean, items: Array<{ __typename?: 'Email', id: string, createdAt: any, subject?: string | null, date?: any | null, status?: EmailStatusEnum | null, from?: { __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> } | null, to?: Array<{ __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> }> | null }> } };
 
 export type EmailQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -120,5 +135,5 @@ export type EmailQueryVariables = Exact<{
 export type EmailQuery = { __typename?: 'Query', emails: Array<{ __typename?: 'Email', date?: any | null, subject?: string | null, from?: { __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> } | null, to?: Array<{ __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> }> | null, cc: Array<{ __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> }>, bcc: Array<{ __typename?: 'AddressObject', value: Array<{ __typename?: 'EmailAddress', address: string, name?: string | null }> }>, body?: { __typename?: 'EmailBody', html?: string | null, text?: string | null } | null }> };
 
 
-export const EmailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Emails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emails"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"subject"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"from"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"to"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<EmailsQuery, EmailsQueryVariables>;
+export const EmailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Emails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTime"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emailsPaginated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"pageSize"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"subject"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"from"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"to"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"hasMore"}}]}}]}}]} as unknown as DocumentNode<EmailsQuery, EmailsQueryVariables>;
 export const EmailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Email"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emails"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"from"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"to"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"cc"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"bcc"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"subject"}},{"kind":"Field","name":{"kind":"Name","value":"body"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}}]} as unknown as DocumentNode<EmailQuery, EmailQueryVariables>;

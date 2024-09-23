@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from 'react-query'
+import { useInfiniteQuery, UseInfiniteQueryResult, useQuery, UseQueryResult } from 'react-query'
 import { DocumentNode, print } from 'graphql'
 import { useClient } from '@/app/hooks/use-client'
 import { ZAFClient } from '@/types/zendesk'
@@ -19,21 +19,25 @@ export const useGraphqlQuery = <T>({
   queryKey,
   document,
   variables,
-  suspense
+  suspense,
+  getNextPageParam,
+  pageSize
 }: {
   queryKey: string[]
   document: DocumentNode
   variables: Record<string, unknown>
   suspense?: boolean
-}): UseQueryResult<T> => {
+  getNextPageParam?: (lastPage: T, pages: T[]) => string | undefined
+  pageSize?: number
+}): UseInfiniteQueryResult<T> => {
   const client = useClient()
   const query = print(document)
 
   const hasEmptyStringVariable = Object.values(variables).some((value) => value === '')
 
-  return useQuery<T>({
+  return useInfiniteQuery<T>({
     queryKey,
-    queryFn: async () => {
+    queryFn: async ({ pageParam }) => {
       const request: Parameters<ZAFClient['request']>[0] = {
         url: `${import.meta.env.VITE_TANGLE_API_BASE_URL}/graphql`,
         type: 'POST',
@@ -42,7 +46,7 @@ export const useGraphqlQuery = <T>({
           'Content-Type': 'application/json',
           'X-API-Key': import.meta.env.VITE_TANGLE_API_KEY
         },
-        data: JSON.stringify({ query, variables }),
+        data: JSON.stringify({ query, variables: { ...variables, after: pageParam, pageSize } }),
         secure: import.meta.env.PROD,
         cors: !import.meta.env.PROD
       }
@@ -54,6 +58,8 @@ export const useGraphqlQuery = <T>({
       return response.responseJSON
     },
     enabled: !hasEmptyStringVariable,
-    suspense
+    suspense,
+    getNextPageParam,
+    staleTime: 60 * 1000
   })
 }
