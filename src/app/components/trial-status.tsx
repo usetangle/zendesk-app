@@ -40,7 +40,7 @@ function TrialStatusContent() {
   const subscription = data?.pages[0].subscription
   const isTrialEnding =
     subscription?.status === SubscriptionStatus.HasOngoingTrial &&
-    DateTime.fromISO(subscription?.trialEndsAt).diffNow('days').days < 14
+    DateTime.fromISO(subscription?.trialEndsAt).diffNow('days').days < 7
 
   return isTrialEnding && !subscription?.hasPaymentMethod && !hasDismissedTrialEndingAlert ? (
     <GlobalAlert type="info" style={{ marginBottom: '2rem', width: '100%' }}>

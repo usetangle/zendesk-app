@@ -194,7 +194,7 @@ export default function Timeline({
   return (
     <ErrorBoundary onReset={refetch} key={address} FallbackComponent={ErrorFallback}>
       <Suspense fallback={<TimelineSkeleton />}>
-        <TimelineContent address={address} emailViewHandler={emailViewHandler} />
+        {address !== '' && <TimelineContent address={address} emailViewHandler={emailViewHandler} />}
       </Suspense>
     </ErrorBoundary>
   )
