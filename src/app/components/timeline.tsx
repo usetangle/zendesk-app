@@ -85,11 +85,7 @@ const TimelineContent = ({
 
   const flatData = data?.pages.flatMap((page) => page.emailsPaginated.items) ?? []
 
-  if (data === undefined) {
-    return null
-  }
-
-  if (data.pages[0].emailsPaginated.items.length === 0) {
+  if (flatData.length === 0) {
     return (
       <Well style={{ flexGrow: '1', marginTop: '1rem' }}>
         <Title>No emails found</Title>
@@ -98,14 +94,14 @@ const TimelineContent = ({
     )
   }
 
-  const mode = data.pages[0].emailsPaginated.items[0].id === 'eml_1' ? 'demo' : 'live'
+  const mode = flatData[0].id === 'eml_1' ? 'demo' : 'live'
 
   return (
     <InfiniteScroll
       dataLength={flatData.length}
       next={() => !isFetching && fetchNextPage()}
       hasMore={!!hasNextPage}
-      loader={<Skeleton style={{ width: '100%', height: '8rem', marginTop: '1rem' }} />}
+      loader={<TimelineSkeleton />}
       endMessage={
         <div
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', color: 'GrayText' }}
@@ -132,43 +128,41 @@ const TimelineContent = ({
             </GlobalAlert.Content>
           </GlobalAlert>
         )}
-        {data.pages
-          .flatMap((page) => page.emailsPaginated.items)
-          .map((email, index) => (
-            <StyledTimelineItem key={index}>
-              <ZendeskTimeline.Content>
-                <Row style={{ fontWeight: '500' }}>{email.subject}</Row>
-                <Row style={{ color: 'GrayText', display: 'block' }}>
-                  {!!email.from && <EmailAddresses emails={email.from} />}
-                  {!!email.to && (
-                    <>
-                      <Span> to </Span>
-                      <EmailAddresses emails={email.to} />
-                    </>
-                  )}
-                </Row>
-                {!!email.status && (
-                  <Row style={{ color: 'GrayText', display: 'block' }}>
-                    <Span>
-                      Email status: <EmailStatus status={email.status} />
-                    </Span>
-                  </Row>
+        {flatData.map((email) => (
+          <StyledTimelineItem key={email.id}>
+            <ZendeskTimeline.Content>
+              <Row style={{ fontWeight: '500' }}>{email.subject}</Row>
+              <Row style={{ color: 'GrayText', display: 'block' }}>
+                {!!email.from && <EmailAddresses emails={email.from} />}
+                {!!email.to && (
+                  <>
+                    <Span> to </Span>
+                    <EmailAddresses emails={email.to} />
+                  </>
                 )}
-                <Row style={{ color: 'GrayText' }}>
+              </Row>
+              {!!email.status && (
+                <Row style={{ color: 'GrayText', display: 'block' }}>
                   <Span>
-                    Sent <EmailDate date={email.date} />{' '}
-                    <Button
-                      isLink
-                      className="view-email-button"
-                      onClick={() => emailViewHandler(new URLSearchParams({ emailId: email.id }))}
-                    >
-                      View email
-                    </Button>
+                    Email status: <EmailStatus status={email.status} />
                   </Span>
                 </Row>
-              </ZendeskTimeline.Content>
-            </StyledTimelineItem>
-          ))}
+              )}
+              <Row style={{ color: 'GrayText' }}>
+                <Span>
+                  Sent <EmailDate date={email.date} />{' '}
+                  <Button
+                    isLink
+                    className="view-email-button"
+                    onClick={() => emailViewHandler(new URLSearchParams({ emailId: email.id }))}
+                  >
+                    View email
+                  </Button>
+                </Span>
+              </Row>
+            </ZendeskTimeline.Content>
+          </StyledTimelineItem>
+        ))}
       </ZendeskTimeline>
     </InfiniteScroll>
   )
@@ -194,12 +188,11 @@ export default function Timeline({
   emailViewHandler: (params: URLSearchParams) => void
 }) {
   const queryClient = useQueryClient()
-  const invalidateCache = () => {
+  const refetch = () => {
     queryClient.refetchQueries({ queryKey: ['emails', address] })
-    console.log('invalidate', address)
   }
   return (
-    <ErrorBoundary onReset={invalidateCache} key={address} FallbackComponent={ErrorFallback}>
+    <ErrorBoundary onReset={refetch} key={address} FallbackComponent={ErrorFallback}>
       <Suspense fallback={<TimelineSkeleton />}>
         <TimelineContent address={address} emailViewHandler={emailViewHandler} />
       </Suspense>
