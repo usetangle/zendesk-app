@@ -1,6 +1,5 @@
 schema {
   query: Query
-  subscription: Subscription
 }
 
 type AddressObject {
