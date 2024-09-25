@@ -35,25 +35,20 @@ const TicketSideBar = () => {
   return (
     <GridContainer>
       <>
-        <Row>
-          <TrialStatus />
-        </Row>
-        <Row>
-          <Search
-            initialSearch={searchTerm}
-            onSubmit={setSearchTerm}
-            style={{
-              width: '100%',
-              position: 'sticky',
-              top: '0',
-              backgroundColor: 'white',
-              zIndex: 10,
-              paddingBottom: '10px'
-            }}
-          />
-          <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />
-        </Row>
-        <Row></Row>
+        <TrialStatus />
+        <Search
+          initialSearch={searchTerm}
+          onSubmit={setSearchTerm}
+          style={{
+            width: '100%',
+            position: 'sticky',
+            top: '0',
+            backgroundColor: 'white',
+            zIndex: 10,
+            paddingBottom: '10px'
+          }}
+        />
+        <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />
       </>
     </GridContainer>
   )
