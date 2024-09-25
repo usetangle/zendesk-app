@@ -1,4 +1,5 @@
 import { Timeline as ZendeskTimeline } from '@zendeskgarden/react-accordions'
+import { ErrorBoundary } from 'react-error-boundary'
 import { graphql } from '@/gql/gql'
 import { Col, Row } from '@zendeskgarden/react-grid'
 import { EmailAddresses } from './email-address'
@@ -10,9 +11,10 @@ import { EmailsQuery } from '@/gql/graphql'
 import { Suspense } from 'react'
 import { Skeleton } from '@zendeskgarden/react-loaders'
 import { EmailDate } from './email-date'
-import { GlobalAlert, Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
+import { Alert, GlobalAlert, Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
 import { EmailStatus } from './email-status'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { useQueryClient } from '@tanstack/react-query'
 
 const StyledTimelineItem = styled(ZendeskTimeline.Item)`
   .view-email-button {
@@ -74,7 +76,6 @@ const TimelineContent = ({
     variables: {
       address
     },
-    suspense: true,
     getNextPageParam: (lastPage) =>
       lastPage.emailsPaginated.hasMore
         ? lastPage.emailsPaginated.items[lastPage.emailsPaginated.items.length - 1].createdAt
@@ -173,6 +174,18 @@ const TimelineContent = ({
   )
 }
 
+const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
+  return (
+    <Alert type="error" style={{ width: '100%' }}>
+      {!!error.message && <Title>{error.message}</Title>}
+      <Paragraph>An error occurred while loading the timeline.</Paragraph>
+      <Button onClick={resetErrorBoundary} isDanger style={{ marginTop: '1rem' }}>
+        Retry
+      </Button>
+    </Alert>
+  )
+}
+
 export default function Timeline({
   address,
   emailViewHandler
@@ -180,9 +193,16 @@ export default function Timeline({
   address: string
   emailViewHandler: (params: URLSearchParams) => void
 }) {
+  const queryClient = useQueryClient()
+  const invalidateCache = () => {
+    queryClient.refetchQueries({ queryKey: ['emails', address] })
+    console.log('invalidate', address)
+  }
   return (
-    <Suspense fallback={<TimelineSkeleton />}>
-      <TimelineContent address={address} emailViewHandler={emailViewHandler} />
-    </Suspense>
+    <ErrorBoundary onReset={invalidateCache} key={address} FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<TimelineSkeleton />}>
+        <TimelineContent address={address} emailViewHandler={emailViewHandler} />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
