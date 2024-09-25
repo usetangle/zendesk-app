@@ -25,7 +25,7 @@ export const useGraphqlQuery = <T>({
 }: {
   queryKey: string[]
   document: DocumentNode
-  variables: Record<string, unknown>
+  variables?: Record<string, unknown>
   suspense?: boolean
   getNextPageParam?: (lastPage: T, pages: T[]) => string | undefined
   pageSize?: number
@@ -33,7 +33,7 @@ export const useGraphqlQuery = <T>({
   const client = useClient()
   const query = print(document)
 
-  const hasEmptyStringVariable = Object.values(variables).some((value) => value === '')
+  const hasEmptyStringVariable = Object.values(variables ?? {}).some((value) => value === '')
 
   return useInfiniteQuery<T>({
     queryKey,
