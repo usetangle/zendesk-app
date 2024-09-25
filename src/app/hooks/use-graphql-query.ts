@@ -21,7 +21,8 @@ export const useGraphqlQuery = <T>({
   variables,
   suspense,
   getNextPageParam,
-  pageSize
+  pageSize,
+  staleTime
 }: {
   queryKey: string[]
   document: DocumentNode
@@ -29,6 +30,7 @@ export const useGraphqlQuery = <T>({
   suspense?: boolean
   getNextPageParam?: (lastPage: T, pages: T[]) => string | undefined
   pageSize?: number
+  staleTime?: number
 }): UseInfiniteQueryResult<T> => {
   const client = useClient()
   const query = print(document)
@@ -60,6 +62,6 @@ export const useGraphqlQuery = <T>({
     enabled: !hasEmptyStringVariable,
     suspense,
     getNextPageParam,
-    staleTime: 60 * 1000
+    staleTime: staleTime ?? 60 * 1000
   })
 }

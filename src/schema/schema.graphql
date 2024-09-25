@@ -1,5 +1,6 @@
 schema {
   query: Query
+  subscription: Subscription
 }
 
 type AddressObject {
@@ -87,4 +88,22 @@ type PaginatedEmailResponse {
 type Query {
   emails(input: EmailInput): [Email!]!
   emailsPaginated(input: EmailInput): PaginatedEmailResponse!
+  subscription: Subscription!
+}
+
+type Subscription {
+  cancelAtPeriodEnd: Boolean
+  currentPeriodEndsAt: DateTime
+  hasPaymentMethod: Boolean
+  status: SubscriptionStatus!
+  trialEndsAt: DateTime
+}
+
+"""Possible statuses for a subscription"""
+enum SubscriptionStatus {
+  HAS_NO_BILLING_ACCOUNT
+  HAS_NO_ONGOING_SUBSCRIPTION
+  HAS_ONGOING_SUBSCRIPTION
+  HAS_ONGOING_TRIAL
+  UNKNOWN
 }
