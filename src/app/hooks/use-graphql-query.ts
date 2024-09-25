@@ -1,4 +1,9 @@
-import { useInfiniteQuery, UseInfiniteQueryResult, useQuery, UseQueryResult } from 'react-query'
+import {
+  useInfiniteQuery,
+  UseInfiniteQueryResult,
+  useSuspenseInfiniteQuery,
+  UseSuspenseInfiniteQueryResult
+} from '@tanstack/react-query'
 import { DocumentNode, print } from 'graphql'
 import { useClient } from '@/app/hooks/use-client'
 import { ZAFClient } from '@/types/zendesk'
@@ -19,7 +24,6 @@ export const useGraphqlQuery = <T>({
   queryKey,
   document,
   variables,
-  suspense,
   getNextPageParam,
   pageSize,
   staleTime
@@ -27,18 +31,18 @@ export const useGraphqlQuery = <T>({
   queryKey: string[]
   document: DocumentNode
   variables?: Record<string, unknown>
-  suspense?: boolean
-  getNextPageParam?: (lastPage: T, pages: T[]) => string | undefined
+  getNextPageParam?: (lastPage: T, pages: T[]) => string
   pageSize?: number
   staleTime?: number
-}): UseInfiniteQueryResult<T> => {
+}) => {
   const client = useClient()
   const query = print(document)
 
   const hasEmptyStringVariable = Object.values(variables ?? {}).some((value) => value === '')
 
-  return useInfiniteQuery<T>({
+  return useSuspenseInfiniteQuery<T>({
     queryKey,
+    initialPageParam: '',
     queryFn: async ({ pageParam }) => {
       const request: Parameters<ZAFClient['request']>[0] = {
         url: `${import.meta.env.VITE_TANGLE_API_BASE_URL}/graphql`,
@@ -59,9 +63,7 @@ export const useGraphqlQuery = <T>({
       }
       return response.responseJSON
     },
-    enabled: !hasEmptyStringVariable,
-    suspense,
-    getNextPageParam,
+    getNextPageParam: getNextPageParam ?? (() => undefined),
     staleTime: staleTime ?? 60 * 1000
   })
 }
