@@ -15,6 +15,7 @@
     "codegen": "graphql-codegen"
   },
   "dependencies": {
+    "@segment/analytics-next": "^1.74.0",
     "@tanstack/react-query": "^5.56.2",
     "@zendeskgarden/css-bedrock": "^9.1.1",
     "@zendeskgarden/react-accordions": "^8.76.6",

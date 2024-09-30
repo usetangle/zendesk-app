@@ -1,8 +1,9 @@
 import { graphql } from '@/gql'
 import { EmailQuery } from '@/gql/graphql'
 import { useGraphqlQuery } from '@/app/hooks/use-graphql-query'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Email, EmailSkeleton } from '../components/emaill'
+import { useAnalytics } from '../hooks/use-analytics'
 
 const email = graphql(`
   query Email($id: String!) {
@@ -47,6 +48,11 @@ const EmailContent = ({ id }: { id: string }) => {
     document: email,
     variables: { id }
   })
+
+  const analytics = useAnalytics()
+  useEffect(() => {
+    analytics.track('Zendesk Email Viewed', { emailId: id })
+  }, [analytics, id])
 
   if (!data || data.pages[0].emails.length === 0) {
     return (

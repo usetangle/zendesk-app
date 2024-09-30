@@ -8,13 +8,14 @@ import { Button } from '@zendeskgarden/react-buttons'
 import styled from 'styled-components'
 import { useGraphqlQuery } from '@/app/hooks/use-graphql-query'
 import { EmailsQuery } from '@/gql/graphql'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Skeleton } from '@zendeskgarden/react-loaders'
 import { EmailDate } from './email-date'
 import { Alert, GlobalAlert, Paragraph, Title, Well } from '@zendeskgarden/react-notifications'
 import { EmailStatus } from './email-status'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useQueryClient } from '@tanstack/react-query'
+import { useAnalytics } from '../hooks/use-analytics'
 
 const StyledTimelineItem = styled(ZendeskTimeline.Item)`
   .view-email-button {
@@ -83,6 +84,14 @@ const TimelineContent = ({
     pageSize: 20
   })
 
+  const analytics = useAnalytics()
+  useEffect(() => {
+    analytics.track('Zendesk Timeline Viewed', {
+      address,
+      firstPageResultCount: data?.pages[0].emailsPaginated.items.length
+    })
+  }, [analytics, address])
+
   const flatData = data?.pages.flatMap((page) => page.emailsPaginated.items) ?? []
 
   if (flatData.length === 0) {
@@ -99,7 +108,12 @@ const TimelineContent = ({
   return (
     <InfiniteScroll
       dataLength={flatData.length}
-      next={() => !isFetching && fetchNextPage()}
+      next={() => {
+        if (!isFetching) {
+          fetchNextPage()
+          analytics.track('Zendesk Timeline Loaded More', { address })
+        }
+      }}
       hasMore={!!hasNextPage}
       loader={<TimelineSkeleton />}
       endMessage={

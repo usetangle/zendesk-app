@@ -1,12 +1,48 @@
 import { useEffect, useState } from 'react'
 import { useClient } from '../hooks/use-client'
-import { Grid, Row } from '@zendeskgarden/react-grid'
+import { Grid } from '@zendeskgarden/react-grid'
 import styled from 'styled-components'
 import Timeline from '../components/timeline'
 import Search from '../components/search'
 import { TrialStatus } from '../components/trial-status'
+import { useAnalytics } from '../hooks/use-analytics'
 
 const TicketSideBar = () => {
+  const client = useClient()
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
+  useEffect(() => {
+    client.get('isCollapsed').then((response) => {
+      setIsCollapsed(response.isCollapsed)
+    })
+  }, [client])
+
+  const analytics = useAnalytics()
+
+  useEffect(() => {
+    client.get('currentUser').then((response) => {
+      analytics.identify(`zendesk-user-${response.currentUser.id}`, {
+        zendeskGroups: response.currentUser.groups,
+        zendeskOrganizationIds: response.currentUser.organizations.map((org: any) => org.id),
+        zendeskRole: response.currentUser.role
+      })
+      analytics.track('Zendesk App Loaded')
+    })
+
+    client.on('app.expanded', () => {
+      setIsCollapsed(false)
+      analytics.track('Zendesk App Expanded')
+    })
+
+    client.on('app.collapsed', () => {
+      setIsCollapsed(true)
+      analytics.track('Zendesk App Collapsed')
+    })
+  }, [client, analytics])
+
+  return <>{!isCollapsed && <TicketSideBarContent />}</>
+}
+
+const TicketSideBarContent = () => {
   const client = useClient()
   const [searchTerm, setSearchTerm] = useState<string>('')
   useEffect(() => {
