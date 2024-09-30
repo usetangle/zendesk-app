@@ -45,8 +45,7 @@ const EmailContent = ({ id }: { id: string }) => {
   const { data } = useGraphqlQuery<EmailQuery>({
     queryKey: ['emails', id],
     document: email,
-    variables: { id },
-    suspense: true
+    variables: { id }
   })
 
   if (!data || data.pages[0].emails.length === 0) {
