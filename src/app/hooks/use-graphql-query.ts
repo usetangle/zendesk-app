@@ -1,9 +1,4 @@
-import {
-  useInfiniteQuery,
-  UseInfiniteQueryResult,
-  useSuspenseInfiniteQuery,
-  UseSuspenseInfiniteQueryResult
-} from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { DocumentNode, print } from 'graphql'
 import { useClient } from '@/app/hooks/use-client'
 import { ZAFClient } from '@/types/zendesk'
@@ -37,8 +32,6 @@ export const useGraphqlQuery = <T>({
 }) => {
   const client = useClient()
   const query = print(document)
-
-  const hasEmptyStringVariable = Object.values(variables ?? {}).some((value) => value === '')
 
   return useSuspenseInfiniteQuery<T>({
     queryKey,
