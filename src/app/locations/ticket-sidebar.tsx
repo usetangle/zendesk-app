@@ -44,7 +44,7 @@ const TicketSideBar = () => {
           zendeskGroups: groups,
           zendeskOrganizationIds: organizations?.map((org) => org.id),
           zendeskRole: role
-      })
+        })
       }
       analytics.track('Zendesk App Loaded')
     })
@@ -105,7 +105,7 @@ const TicketSideBarContent = () => {
             paddingBottom: '10px'
           }}
         />
-        <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />
+        {searchTerm !== '' && <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />}
       </>
     </GridContainer>
   )
