@@ -18,7 +18,7 @@ export function TranslationProvider({ children }: { children: React.ReactNode })
     async (currentLocale: string) => {
       const { currentUser } = await client.get('currentUser')
 
-      const locale = currentLocale || currentUser.locale
+      const locale = currentLocale || (currentUser as { locale: string }).locale
 
       await i18n.loadTranslations(locale)
       setLoading(false)

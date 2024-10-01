@@ -7,12 +7,28 @@ import Search from '../components/search'
 import { TrialStatus } from '../components/trial-status'
 import { useAnalytics } from '../hooks/use-analytics'
 
+function isCurrentUser(user: any): user is {
+  id: number
+  groups: any[]
+  organizations?: { id: number }[]
+  role: string
+} {
+  return (
+    typeof user === 'object' &&
+    typeof user.id === 'number' &&
+    Array.isArray(user.groups) &&
+    (user.organizations === undefined ||
+      (Array.isArray(user.organizations) && user.organizations.every((org: any) => typeof org.id === 'number'))) &&
+    typeof user.role === 'string'
+  )
+}
+
 const TicketSideBar = () => {
   const client = useClient()
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
   useEffect(() => {
     client.get('isCollapsed').then((response) => {
-      setIsCollapsed(response.isCollapsed)
+      setIsCollapsed(response.isCollapsed as boolean)
     })
   }, [client])
 
@@ -20,11 +36,16 @@ const TicketSideBar = () => {
 
   useEffect(() => {
     client.get('currentUser').then((response) => {
-      analytics.identify(`zendesk-user-${response.currentUser.id}`, {
-        zendeskGroups: response.currentUser.groups,
-        zendeskOrganizationIds: response.currentUser.organizations.map((org: any) => org.id),
-        zendeskRole: response.currentUser.role
+      const currentUser = response.currentUser
+      if (isCurrentUser(currentUser)) {
+        const { id, groups, organizations, role } = currentUser
+
+        analytics.identify(`zendesk-user-${id}`, {
+          zendeskGroups: groups,
+          zendeskOrganizationIds: organizations?.map((org) => org.id),
+          zendeskRole: role
       })
+      }
       analytics.track('Zendesk App Loaded')
     })
 
@@ -47,8 +68,8 @@ const TicketSideBarContent = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   useEffect(() => {
     const getRequester = async () => {
-      const requester = await client.get('ticket.requester')
-      setSearchTerm(requester['ticket.requester'].email)
+      const requester = await client.get('ticket.requester.email')
+      setSearchTerm(typeof requester['ticket.requester.email'] === 'string' ? requester['ticket.requester.email'] : '')
     }
     getRequester()
   }, [client])

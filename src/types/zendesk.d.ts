@@ -3,7 +3,7 @@
 export interface ZAFClient {
   on(event: string, callback: (...args: any[]) => void): void
   invoke(method: string, ...args: any[]): Promise<any>
-  get<T extends string>(path: T): Promise<{ errors: object } & Record<T, any>>
+  get<T extends string>(path: T): Promise<{ errors: object } & Record<T, unknown>>
   set(path: string, value: any): Promise<void>
   request<T = any>(options: {
     url: string
