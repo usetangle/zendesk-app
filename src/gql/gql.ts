@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query Emails($address: String!, $after: DateTime, $pageSize: Float) {\n    emailsPaginated(input: { filters: { address: $address }, after: $after, pageSize: $pageSize }) {\n      items {\n        id\n        createdAt\n        subject\n        date\n        status\n        from {\n          value {\n            address\n            name\n          }\n        }\n        to {\n          value {\n            address\n            name\n          }\n        }\n      }\n      hasMore\n    }\n  }\n": types.EmailsDocument,
-    "\n  query subscription {\n    subscription {\n      status\n      trialEndsAt\n      hasPaymentMethod\n    }\n  }\n": types.SubscriptionDocument,
+    "\n  query status {\n    subscription {\n      status\n      trialEndsAt\n      hasPaymentMethod\n    }\n    mode {\n      isDemo\n    }\n  }\n": types.StatusDocument,
     "\n  query Email($id: String!) {\n    emails(input: { filters: { id: $id } }) {\n      date\n      from {\n        value {\n          address\n          name\n        }\n      }\n      to {\n        value {\n          address\n          name\n        }\n      }\n      cc {\n        value {\n          address\n          name\n        }\n      }\n      bcc {\n        value {\n          address\n          name\n        }\n      }\n      subject\n      body {\n        html\n        text\n      }\n    }\n  }\n": types.EmailDocument,
 };
 
@@ -39,7 +39,7 @@ export function graphql(source: "\n  query Emails($address: String!, $after: Dat
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query subscription {\n    subscription {\n      status\n      trialEndsAt\n      hasPaymentMethod\n    }\n  }\n"): (typeof documents)["\n  query subscription {\n    subscription {\n      status\n      trialEndsAt\n      hasPaymentMethod\n    }\n  }\n"];
+export function graphql(source: "\n  query status {\n    subscription {\n      status\n      trialEndsAt\n      hasPaymentMethod\n    }\n    mode {\n      isDemo\n    }\n  }\n"): (typeof documents)["\n  query status {\n    subscription {\n      status\n      trialEndsAt\n      hasPaymentMethod\n    }\n    mode {\n      isDemo\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

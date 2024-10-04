@@ -1,6 +1,5 @@
 schema {
   query: Query
-  subscription: Subscription
 }
 
 type AddressObject {
@@ -80,6 +79,10 @@ enum EmailStatusEnum {
   UNSUBSCRIBED
 }
 
+type Mode {
+  isDemo: Boolean!
+}
+
 type PaginatedEmailResponse {
   hasMore: Boolean!
   items: [Email!]!
@@ -88,6 +91,7 @@ type PaginatedEmailResponse {
 type Query {
   emails(input: EmailInput): [Email!]!
   emailsPaginated(input: EmailInput): PaginatedEmailResponse!
+  mode: Mode!
   subscription: Subscription!
 }
 

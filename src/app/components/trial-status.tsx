@@ -2,24 +2,27 @@ import { Suspense, useEffect, useState } from 'react'
 import { graphql } from '@/gql/gql'
 import { useGraphqlQuery } from '@/app/hooks/use-graphql-query'
 import { DateTime } from 'luxon'
-import { SubscriptionQuery, SubscriptionStatus } from '@/gql/graphql'
+import { StatusQuery, SubscriptionStatus } from '@/gql/graphql'
 import { GlobalAlert, Paragraph, Title } from '@zendeskgarden/react-notifications'
 import { Button } from '@zendeskgarden/react-buttons'
 import { ErrorBoundary } from 'react-error-boundary'
 
 const subscriptionQuery = graphql(`
-  query subscription {
+  query status {
     subscription {
       status
       trialEndsAt
       hasPaymentMethod
     }
+    mode {
+      isDemo
+    }
   }
 `)
 
 function TrialStatusContent() {
-  const { data } = useGraphqlQuery<SubscriptionQuery>({
-    queryKey: ['subscription'],
+  const { data } = useGraphqlQuery<StatusQuery>({
+    queryKey: ['status'],
     document: subscriptionQuery,
     staleTime: 60 * 60 * 24 * 1000
   })
@@ -38,11 +41,12 @@ function TrialStatusContent() {
   }
 
   const subscription = data?.pages[0].subscription
+  const isDemo = data?.pages[0].mode?.isDemo
   const isTrialEnding =
     subscription?.status === SubscriptionStatus.HasOngoingTrial &&
     DateTime.fromISO(subscription?.trialEndsAt).diffNow('days').days < 7
 
-  return isTrialEnding && !subscription?.hasPaymentMethod && !hasDismissedTrialEndingAlert ? (
+  return isTrialEnding && !subscription?.hasPaymentMethod && !hasDismissedTrialEndingAlert && !isDemo ? (
     <GlobalAlert type="info" style={{ marginBottom: '2rem', width: '100%' }}>
       <GlobalAlert.Content>
         <Title>
