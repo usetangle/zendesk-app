@@ -6,6 +6,7 @@ import Timeline from '../components/timeline'
 import Search from '../components/search'
 import { TrialStatus } from '../components/trial-status'
 import { useAnalytics } from '../hooks/use-analytics'
+import { Upgrade } from '../components/upgrade'
 
 function isCurrentUser(user: any): user is {
   id: number
@@ -105,7 +106,12 @@ const TicketSideBarContent = () => {
             paddingBottom: '10px'
           }}
         />
-        {searchTerm !== '' && <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />}
+        {searchTerm !== '' && (
+          <>
+            <Timeline address={searchTerm} emailViewHandler={handleNewInstance} />
+            <Upgrade />
+          </>
+        )}
       </>
     </GridContainer>
   )
