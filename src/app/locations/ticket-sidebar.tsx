@@ -13,6 +13,7 @@ function isCurrentUser(user: any): user is {
   groups: any[]
   organizations?: { id: number }[]
   role: string
+  email: string
 } {
   return (
     typeof user === 'object' &&
@@ -20,7 +21,8 @@ function isCurrentUser(user: any): user is {
     Array.isArray(user.groups) &&
     (user.organizations === undefined ||
       (Array.isArray(user.organizations) && user.organizations.every((org: any) => typeof org.id === 'number'))) &&
-    typeof user.role === 'string'
+    typeof user.role === 'string' &&
+    typeof user.email === 'string'
   )
 }
 
@@ -39,12 +41,13 @@ const TicketSideBar = () => {
     client.get('currentUser').then((response) => {
       const currentUser = response.currentUser
       if (isCurrentUser(currentUser)) {
-        const { id, groups, organizations, role } = currentUser
+        const { id, groups, organizations, role, email } = currentUser
 
         analytics.identify(`zendesk-user-${id}`, {
           zendeskGroups: groups,
           zendeskOrganizationIds: organizations?.map((org) => org.id),
-          zendeskRole: role
+          zendeskRole: role,
+          email
         })
       }
       analytics.track('Zendesk App Loaded')
